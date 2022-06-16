@@ -38,6 +38,8 @@ public class Event_ extends Event {
     super.getTitle()
     super.getReporter()
      */
+    
+    
     @Override
     public ConstructionSite getConstructionSite() {
         return this.Constructionsite;

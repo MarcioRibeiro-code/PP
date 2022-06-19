@@ -69,21 +69,23 @@ public class EventManager_ implements EventManager {
             this.Event = temp;
         }
 
-        Notifier_ ntft1 = new Notifier_();
         //NOTIFICAR O GESTOR
-        ntft1.notify(event.getNotificationMessage(), event.getPriority(), event.getConstructionSite().getResponsible());
+        this.Notifier.notify(event.getNotificationMessage(), event.getPriority(), event.getConstructionSite().getResponsible());
 
         //NOTIFICAR OS TEAM LEADERS
         Team[] temp = new Team[event.getConstructionSite().getTeams().length];
 
         for (Team tm1 : temp) {
             for (Employee em1 : tm1.getEmployees(EmployeeType.TEAM_LEADER)) {
-                ntft1.notify(event.getNotificationMessage(), event.getPriority(), em1);
+                 this.Notifier.notify(event.getNotificationMessage(), event.getPriority(), em1);
             }
 
         }
 
         this.Event[this.getEvent().length] = event;
+
+        // Event_toJSON
+        //System.out.println(InsuranceReporter.addEvent(););
     }
 
     @Override

@@ -20,6 +20,7 @@ public class Event_ extends Event {
     private final String Details;
     //Mensagem a ser Displayed no Notifier, quando ocorre um problema
     private final String NotificationMessage;
+    private boolean Reported_Insurance;
 
     public Event_(EventPriority priority, String title, Employee reporter,
             ConstructionSite Constructionsite, String Details,
@@ -38,8 +39,6 @@ public class Event_ extends Event {
     super.getTitle()
     super.getReporter()
      */
-    
-    
     @Override
     public ConstructionSite getConstructionSite() {
         return this.Constructionsite;
@@ -54,7 +53,6 @@ public class Event_ extends Event {
     public String getNotificationMessage() {
         return this.NotificationMessage;
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -80,5 +78,4 @@ public class Event_ extends Event {
         return true;
     }
 
-    
 }

@@ -39,15 +39,6 @@ public class ConstructionSite_ implements ConstructionSite {
         this.Equipment = new Equipment[10];
     }
 
-    public ConstructionSite_(String Name, String Location, String Permit, LocalDate PermitExpirationDate) {
-        this.Name = Name;
-        this.Location = Location;
-        this.Permit = Permit;
-        this.PermitExpirationDate = PermitExpirationDate;
-        this.Team = new Team[10];
-        this.Equipment = new Equipment[10];
-    }
-
     /**
      * Returns the name of the construction site.
      *
@@ -392,7 +383,37 @@ public class ConstructionSite_ implements ConstructionSite {
 
     @Override
     public String toString() {
-        return "ConstructionSite_{" + "Name=" + Name + ", Location=" + Location + ", Permit=" + Permit + ", PermitExpirationDate=" + PermitExpirationDate + ", Responsible=" + Responsible + ", Team=" + Arrays.toString(this.getTeams()) + ", TEAM SIZE=" + this.Team.length + ", Equipment=" + Arrays.toString(this.getEquipment()) + '}';
+
+        String Team_s = "";
+        for (Team tm1 : this.getTeams()) {
+            Team_s += tm1.toString();
+        }
+
+        return "ConstructionSite_{" + "Name=" + Name + ", Location=" + Location + ", Permit=" + Permit + ", PermitExpirationDate=" + PermitExpirationDate + ", Responsible=" + Responsible + ", Team=" + Team_s + ", TEAM SIZE=" + this.Team.length + ", Equipment=" + Arrays.toString(this.getEquipment()) + '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ConstructionSite_ other = (ConstructionSite_) obj;
+        if (!this.Name.equals(other.Name)) {
+            return false;
+        }
+        if (!this.Location.equals(other.Location)) {
+            return false;
+        }
+        if (!this.Permit.equals(other.Permit)) {
+            return false;
+        }
+        return true;
     }
 
 }

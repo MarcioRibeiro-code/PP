@@ -158,13 +158,13 @@ public class Team_ implements Team {
     @Override
     public String toString() {
 
-        return "Team_{" + "Name=" + Name + ", NumberOfEmployess=" + NumberOfEmployess + ", Employes=" + Arrays.toString(Employes) + '}';
-    }
+        String Employee_S = "";
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        return hash;
+        for (int i = 0; i < this.getNumberOfEmployees(); i++) {
+            Employee_S += this.Employes[i].toString() + ("\n");
+        }
+
+        return "--Team--" + "\nName:" + Name + "\nNumberOfEmployess:" + NumberOfEmployess + "\nEmployes:" + Employee_S;
     }
 
     @Override
@@ -179,9 +179,7 @@ public class Team_ implements Team {
             return false;
         }
         final Team_ other = (Team_) obj;
-        if (this.NumberOfEmployess != other.NumberOfEmployess) {
-            return false;
-        }
+
         if (!this.Name.equals(other.Name)) {
             return false;
         }

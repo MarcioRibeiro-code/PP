@@ -358,6 +358,9 @@ public class ConstructionSite_ implements ConstructionSite {
      */
     @Override
     public boolean isValid() {
+        if (this.Responsible == null) {
+            return false;
+        }
         if (this.Responsible.getType() != EmployeeType.MANAGER) {
             return false;
         }

@@ -45,7 +45,7 @@ public class Employee_ extends Employee {
 
     @Override
     public String toString() {
-        return "Employee" + "\nName:" + this.getName() + "\nUUID:" + this.getUUID() + "\nType:" + this.getType().toString();
+        return "--Employee--" + "\nName:" + this.getName() + "\nUUID:" + this.getUUID() + "\nType:" + this.getType().toString();
     }
 
 }

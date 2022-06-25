@@ -152,7 +152,19 @@ public class Team_ implements Team {
 
     @Override
     public Employee[] getEmployees() {
-        return this.Employes;
+        int contador = 0;
+
+        for (Employee empl : this.Employes) {
+            if (empl != null) {
+                contador++;
+            }
+        }
+
+        Employee[] temp = new Employee[contador];
+
+        System.arraycopy(this.Employes, 0, temp, 0, contador);
+
+        return temp;
     }
 
     @Override
@@ -161,7 +173,7 @@ public class Team_ implements Team {
         String Employee_S = "";
 
         for (int i = 0; i < this.getNumberOfEmployees(); i++) {
-            Employee_S += this.Employes[i].toString() + ("\n");
+            Employee_S += ("\n") + this.Employes[i].toString();
         }
 
         return "--Team--" + "\nName:" + Name + "\nNumberOfEmployess:" + NumberOfEmployess + "\nEmployes:" + Employee_S;

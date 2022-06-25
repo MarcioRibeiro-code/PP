@@ -69,12 +69,6 @@ public class Equipment_ implements Equipment {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -96,6 +90,11 @@ public class Equipment_ implements Equipment {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "--Equipment--" + "\nName:" + Name + "\nType:" + Type + "\nStatus:" + Status;
     }
 
 }

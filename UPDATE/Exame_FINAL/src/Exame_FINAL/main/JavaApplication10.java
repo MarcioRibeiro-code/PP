@@ -38,9 +38,11 @@ public class JavaApplication10 {
         Manager mn1 = new Manager();
 
         Scanner scan = new Scanner(System.in);
+        System.out.println("--MENU PRINCIPAL--");
         System.out.println("1 - Gerir Construction Site");
         System.out.println("2 - Gerir Equipas");
-        System.out.println("3 - Gerir Eventos");
+        System.out.println("3 - Gerir Funcionarios");
+        System.out.println("4 - Gerir Equipamentos");
         System.out.println("0 - Sair");
         System.out.print("opcao: ");
         key = scan.nextInt();
@@ -48,159 +50,22 @@ public class JavaApplication10 {
 
             switch (key) {
                 case 1:
-                    while (key != 0) {
-                        System.out.println("1 - Adicionar Construction Site");
-                        System.out.println("2 - Listar Construction Site [" + mn1.getConstruction_Site().length + "/" + mn1.getConstruction_Site_SIZE() + "]");
-                        System.out.println("3 - Adicionar Equipa a um Construction Site");
-                        System.out.print("opcao: ");
-                        key = scan.nextInt();
-                        switch (key) {
-                            case 1:
-                                System.out.print("Nome: ");
-                                String Name = scan.next();
-                                System.out.print("Location: ");
-                                String Location = scan.next();
-
-                                 {
-                                    try {
-                                        mn1.addConstruction_Site(Name, Location);
-                                    } catch (ManagerException ex) {
-                                        System.out.println(ex.toString());
-                                    }
-                                }
-                                break;
-
-                            case 2:
-
-                                for (ConstructionSite cs1 : mn1.getConstruction_Site()) {
-                                    System.out.println(cs1.toString());
-                                }
-                                break;
-
-                        }
-                    }
+                    mn1.Manage_ConstructionSite();
                     break;
-
                 case 2:
-                    while (key != 0) {
-                        System.out.println("1 - Criar Equipa");
-                        System.out.println("2 - Listar Equipas [" + mn1.getTeam().length + "]");
-                        System.out.println("3 - Remover Funcionario de Uma Equipa");
-                        System.out.print("opcao: ");
-                        key = scan.nextInt();
-                        switch (key) {
-                            case 1:
-                                System.out.print("Nome da Equipa: ");
-                                String Name_Team = scan.next();
-                                System.out.print("Numero de funcionarios: ");
-                                int num_funcionarios = scan.nextInt();
-                                Team_ tm1 = new Team_(Name_Team);
-
-                                for (int i = 0; i < num_funcionarios; i++) {
-                                    System.out.print("Nome do Funcionario: ");
-                                    String Name = scan.next();
-                                    System.out.println("Employee Type");
-                                    System.out.println("Worker");
-                                    System.out.println("Team Leader");
-                                    System.out.println("Manager");
-                                    System.out.print("Tipo: ");
-                                    String tipo = scan.next();
-
-                                    Employee_ empl;
-                                    switch (tipo.toUpperCase()) {
-
-                                        case "WORKER":
-                                            empl = new Employee_(Name, EmployeeType.WORKER);
-                                            break;
-                                        case "TEAM LEADER":
-                                            empl = new Employee_(Name, EmployeeType.TEAM_LEADER);
-                                            break;
-                                        case "MANAGER":
-                                            empl = new Employee_(Name, EmployeeType.MANAGER);
-                                            break;
-                                        default:
-                                            empl = new Employee_(Name, EmployeeType.WORKER);
-                                            break;
-                                    }
-                                    try {
-                                        tm1.addEmployees(empl);
-                                        System.out.println(tm1.getNumberOfEmployees());
-                                    } catch (TeamException ex) {
-                                        System.out.println(ex.toString());
-                                    }
-                                }
-                                 {
-                                    try {
-                                        mn1.addTeam(tm1);
-                                    } catch (ManagerException ex) {
-                                        System.out.println(ex.getMessage());
-                                    }
-                                }
-                                break;
-
-                            case 2:
-                                for (Team tmp : mn1.getTeam()) {
-                                    System.out.println(tmp.toString());
-                                }
-                                break;
-
-                            case 3:
-                                int contador = 0;
-                                System.out.println("Remover Funcionario de Uma Equipa");
-                                for (Team tmp : mn1.getTeam()) {
-
-                                    System.out.println((contador + 1) + tmp.getName());
-                                    contador++;
-                                }
-
-                                System.out.println("0 - Sair");
-                                System.out.print("opcao: ");
-                                key = scan.nextInt();
-
-                                if (key == 0) {
-                                    break;
-                                }
-
-                                Team[] tm = mn1.getTeam();
-
-                                contador = 0;
-
-                                Employee[] emps = tm[key - 1].getEmployees();
-                                for (int i = 0; i < tm[key - 1].getNumberOfEmployees(); i++) {
-
-                                    System.out.println((contador + 1) + emps[i].toString());
-                                }
-
-                                System.out.println("0 - Sair");
-                                System.out.print("Opcao:");
-                                int emp_key = scan.nextInt();
-
-                                if (emp_key == 0) {
-                                    break;
-                                }
-
-                                Employee[] em = tm[key - 1].getEmployees();
-
-                                 {
-                                    try {
-                                        tm[key - 1].removeEmployees(em[emp_key - 1]);
-                                    } catch (TeamException ex) {
-                                        System.out.println(ex.getMessage());
-                                    }
-                                }
-
-                                break;
-
-                        }
-
-                    }
-
-                default:
+                    mn1.manage_Team();
+                    break;
+                case 3:
+                    mn1.Manage_Employee();
+                    break;
+                case 4:
+                    mn1.ManageEquipment();
                     break;
             }
-            System.out.println("1 - Criar Equipa");
-            System.out.println("2 - Listar Equipas [" + mn1.getTeam().length + "]");
-            System.out.println("3 - Remover Funcionario de Uma Equipa");
+            System.out.println("\n1 - Gerir Construction Site");
+            System.out.println("2 - Gerir Equipas");
+            System.out.println("3 - Gerir Funcionarios");
+            System.out.println("4 - Gerir Eventos");
             System.out.println("0 - Sair");
             System.out.print("opcao: ");
             key = scan.nextInt();

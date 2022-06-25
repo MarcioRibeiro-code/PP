@@ -24,6 +24,7 @@ public class Accident_ extends Event implements Accident {
     private final String NotificationMessage;
     //Notified to Insurance
     private boolean Insurance_Notified;
+    private boolean Reported;
 
     public Accident_(Employee Employee, ConstructionSite ConstructionSite, String Details, String NotificationMessage, EventPriority priority, String title, Employee reporter) {
         super(priority, title, reporter);
@@ -32,14 +33,23 @@ public class Accident_ extends Event implements Accident {
         this.Details = Details;
         this.NotificationMessage = NotificationMessage;
         this.Insurance_Notified = false;
+        this.Reported = false;
+    }
+
+    public boolean isReported() {
+        return Reported;
+    }
+
+    public void setReported() {
+        this.Reported = true;
     }
 
     public boolean isInsurance_Notified() {
         return Insurance_Notified;
     }
 
-    public void setInsurance_Notified(boolean Insurance_Notified) {
-        this.Insurance_Notified = Insurance_Notified;
+    public void setInsurance_Notified() {
+        this.Insurance_Notified = true;
     }
 
     @Override

@@ -30,6 +30,7 @@ public class Failure_ extends Event implements Failure {
     private final String Details;
     private final String NotificationMessage;
     private boolean Insurance_Notified;
+    private boolean Reported;
 
     public Failure_(Equipment Equipment, ConstructionSite ConstructionSite, String Details, String NotificationMessage, EventPriority priority, String title, Employee reporter) {
         super(priority, title, reporter);
@@ -39,19 +40,25 @@ public class Failure_ extends Event implements Failure {
         this.Details = Details;
         this.NotificationMessage = NotificationMessage;
         this.Insurance_Notified = false;
+        this.Reported = false;
+    }
+
+    public boolean isReported() {
+        return Reported;
+    }
+
+    public void setReported() {
+        this.Reported = true;
     }
 
     public boolean isInsurance_Notified() {
         return Insurance_Notified;
     }
 
-    public void setInsurance_Notified(boolean Insurance_Notified) {
-        this.Insurance_Notified = Insurance_Notified;
+    public void setInsurance_Notified() {
+        this.Insurance_Notified = true;
     }
 
-    
-    
-    
     @Override
     public Equipment getEquipment() {
         return this.Equipment;

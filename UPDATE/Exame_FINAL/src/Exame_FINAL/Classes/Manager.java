@@ -15,9 +15,9 @@ import estgconstroi.Team;
 import estgconstroi.enums.EmployeeType;
 import estgconstroi.enums.EquipmentStatus;
 import estgconstroi.enums.EquipmentType;
+import estgconstroi.enums.EventPriority;
 import estgconstroi.exceptions.ConstructionSiteException;
 import estgconstroi.exceptions.TeamException;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -57,6 +57,7 @@ public class Manager {
             System.out.println("8- isValid");
             System.out.println("9- Listar ConstructionSites");
             System.out.println("0 - Sair");
+            System.out.print("Opcao:");
             key = scan.nextInt();
 
             switch (key) {
@@ -691,14 +692,18 @@ public class Manager {
 
                 case 2:
                     System.out.println("\n--Remover Funcionario--");
-                    contador = 0;
+                    contador = 1;
                     for (Employee empl : this.getEmployee()) {
-                        System.out.println((contador + 1) + "- " + empl.getName() + ";" + empl.getUUID());
+                        System.out.println((contador++) + "- " + empl.getName() + ";" + empl.getUUID());
                     }
                     System.out.println("0 - Sair");
                     System.out.print("Opcao: ");
 
                     key = scan.nextInt();
+
+                    if (key == 0) {
+                        break;
+                    }
 
                      {
                         try {
@@ -1004,6 +1009,129 @@ public class Manager {
         } else {
             throw new ManagerException("Equipment isn't in the software");
         }
+    }
+
+    /**
+     *
+     * EVENT MANAGER
+     *
+     */
+    public void Manage_Event() {
+
+        int key = -1;
+
+        Scanner scan = new Scanner(System.in);
+
+        do {
+            System.out.println("\n--Manage Event--");
+            System.out.println("1 - New Event");
+            System.out.println("2 - Reportar Event");
+            System.out.println("3 - Remover um Evento");
+            System.out.println("4 - Remover todos os Eventos");
+            System.out.println("5 - Report to Insurance");
+            System.out.println("0 - Sair");
+            System.out.print("Opcao: ");
+            key = scan.nextInt();
+
+            switch (key) {
+                case 1:
+                    int contador = 1;
+                    System.out.println("\n--New Event--");
+                    System.out.println("--Construction Site--");
+                    for (ConstructionSite cs : this.getConstruction_Site()) {
+                        System.out.println((contador++) + " - Nome:" + cs.getName() + "; Location:" + cs.getLocation());
+                    }
+                    System.out.println("0 - Sair");
+                    key = scan.nextInt();
+
+                    ConstructionSite cs = this.getConstruction_Site()[key - 1];
+
+                    if (key == 0) {
+                        break;
+                    }
+
+                    System.out.println("--Event Type--");
+                    System.out.println("1 - Failure");
+                    System.out.println("2 - Incident");
+                    System.out.println("3 - Failure");
+                    System.out.println("0 - Sair");
+                    int ev_type = scan.nextInt();
+
+                    switch (ev_type) {
+                        //FAILURE
+                        case 1:
+
+                            contador = 1;
+                            System.out.println("--TEAM--");
+                            for (Team tm : this.getTeam()) {
+                                System.out.println((contador++) + "- " + tm.getName());
+                            }
+                            System.out.println("0 - Sair");
+                            System.out.print("Opcao: ");
+                            key = scan.nextInt();
+
+                            if (key == 0) {
+                                break;
+                            }
+
+                            contador = 1;
+                            Team tm = cs.getTeams()[key - 1];
+                            System.out.println("--Employee--");
+                            for (Employee empl : tm.getEmployees()) {
+                                System.out.println((contador++) + " - Name:" + empl.getName() + "; Uuid:" + empl.getUUID());
+                            }
+                            System.out.println("0 - Sair");
+                            System.out.print("Opcao: ");
+                            key = scan.nextInt();
+
+                            if (key == 0) {
+                                break;
+                            }
+
+                            Employee empl = tm.getEmployees()[key - 1];
+
+                            contador = 1;
+                            System.out.println("--Equipment--");
+                            for (Equipment eqpmnt : cs.getEquipment()) {
+                                System.out.println((contador++) + " - Name:" + eqpmnt.getName() + "; Type:" + eqpmnt.getType());
+                            }
+                            System.out.println("0 - Sair");
+                            key = scan.nextInt();
+
+                            if (key == 0) {
+                                break;
+                            }
+                            Equipment eqpmnt = cs.getEquipment()[key - 1];
+
+                            System.out.print("Details:");
+                            String Details = scan.next();
+                            System.out.print("Details:");
+                            String NotificationMessage = scan.next();
+                            System.out.print("Title:");
+                            String Title = scan.next();
+
+                            contador = 1;
+
+                            for (EventPriority ep : EventPriority.values()) {
+                                System.out.println((contador++) + "- " + ep.toString());
+                            }
+                            System.out.println("0 - Sair");
+                            key = scan.nextInt();
+
+                            if (key == 0) {
+                                break;
+                            }
+                           // EventPriority.values()[key - 1];
+                            this.EventManager.addEvent(new Failure_(eqpmnt, cs, Details, NotificationMessage,EventPriority.HIGH, Title, empl));
+
+                            break;
+
+                    }
+
+                    break;
+            }
+
+        } while (key != 0);
 
     }
 

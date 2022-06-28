@@ -22,6 +22,10 @@ public class Team_ implements Team {
     private int NumberOfEmployess;
     private Employee_[] Employes;
 
+    /**
+     *
+     * @param string
+     */
     public Team_(String Name) {
         this.NumberOfEmployess = 0;
         this.Name = Name;
@@ -118,6 +122,11 @@ public class Team_ implements Team {
 
     }
 
+    /**
+     *
+     * @param string
+     * @return
+     */
     @Override
     public Employee[] getEmployees(String string) {
         int ARRAY_SIZE = 4;
@@ -134,6 +143,11 @@ public class Team_ implements Team {
         return temp_empl;
     }
 
+    /**
+     *
+     * @param et
+     * @return
+     */
     @Override
     public Employee[] getEmployees(EmployeeType et) {
         int ARRAY_SIZE = 4;
@@ -150,6 +164,10 @@ public class Team_ implements Team {
         return temp_empl;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Employee[] getEmployees() {
         int contador = 0;

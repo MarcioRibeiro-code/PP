@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* 
+* Nome: Marcio Samuel Santos Ribeiro
+* Número: 8200408
+* Turma: LEI2T4
+* 
+* Nome: Hugo Miguel Gomes Alves Ribeiro
+* Número: 8200441
+* Turma: LEI2T3
+*/
 package Exame_FINAL.Exceptions;
 
 /**
@@ -11,9 +15,16 @@ package Exame_FINAL.Exceptions;
  */
 public class ManagerException extends Exception{
 
+    /**
+     *
+     */
     public ManagerException() {
     }
 
+    /**
+     *
+     * @param string
+     */
     public ManagerException(String message) {
         super(message);
     }

@@ -1,23 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* 
+* Nome: Marcio Samuel Santos Ribeiro
+* Número: 8200408
+* Turma: LEI2T4
+* 
+* Nome: Hugo Miguel Gomes Alves Ribeiro
+* Número: 8200441
+* Turma: LEI2T3
+*/
 package Exame_FINAL.Classes;
 
 import Exame_FINAL.Exceptions.ManagerException;
-import Exame_FINAL.Interface.IManager;
 import estgconstroi.ConstructionSite;
 import estgconstroi.Employee;
 import estgconstroi.Equipment;
-import estgconstroi.EventManager;
+import estgconstroi.Event;
+import estgconstroi.InsuranceReporter;
 import estgconstroi.Team;
 import estgconstroi.enums.EmployeeType;
 import estgconstroi.enums.EquipmentStatus;
 import estgconstroi.enums.EquipmentType;
 import estgconstroi.enums.EventPriority;
 import estgconstroi.exceptions.ConstructionSiteException;
+import estgconstroi.exceptions.EventManagerException;
 import estgconstroi.exceptions.TeamException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -31,15 +37,24 @@ public class Manager {
     private Team[] Team;
     private Employee[] Employee;
     private Equipment[] Equipment;
-    private EventManager EventManager;
+    private EventManager_ EventManager;
 
+    /**
+     *
+     */
     public Manager() {
         this.ConstructionSite = new ConstructionSite[4];
         this.Team = new Team[4];
         this.Employee = new Employee[4];
         this.Equipment = new Equipment[4];
+        this.EventManager = new EventManager_();
     }
 
+    /**
+     * Sub-Menu where Constructions can be managed, like adding a new
+     * Construction Site to the software, remove it. The same goes for the Teams
+     * and Equipemnt.
+     */
     public void Manage_ConstructionSite() {
         int key = -1;
 
@@ -72,6 +87,7 @@ public class Manager {
                      {
                         try {
                             this.addConstruction_Site(Name, Location);
+                            System.out.println("Adicionado com Sucesso");
                         } catch (ManagerException ex) {
                             System.out.println(ex.getMessage());
                         }
@@ -96,6 +112,7 @@ public class Manager {
                      {
                         try {
                             this.removeConstruction_Site(this.getConstruction_Site()[key - 1]);
+                            System.out.println("Removido com Sucesso");
                         } catch (ManagerException ex) {
                             System.out.println(ex.getMessage());
                         }
@@ -117,7 +134,7 @@ public class Manager {
                         break;
                     }
 
-                    ConstructionSite cs = this.getConstruction_Site()[key - 1];
+                    ConstructionSite_ cs = (ConstructionSite_) this.getConstruction_Site()[key - 1];
                     System.out.println("1- Adicionar Permit");
                     System.out.println("2- Adicionar Responsible");
                     System.out.println("0 - Sair");
@@ -134,15 +151,12 @@ public class Manager {
                             System.out.print("Permit String:");
                             String string = scan.next();
                             System.out.println("Expiration date of the permit: ");
-                            System.out.print("Dia: ");
-                            String date = scan.next() + "/";
-                            System.out.print("Mes: ");
-                            date += scan.next() + "/";
-                            System.out.print("Ano: ");
-                            date += scan.next();
+                            System.out.print("Data (yyyy-MM-dd): ");
+                            String date = scan.next();
 
-                            // SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                            //Problemas em Transformar para dd-MM-YY, throws Exception
                             cs.setPermit(string, LocalDate.parse(date));
+
                             break;
                         case 2:
                             contador = 1;
@@ -186,7 +200,7 @@ public class Manager {
                         break;
                     }
 
-                    cs = this.getConstruction_Site()[key - 1];
+                    cs = (ConstructionSite_) this.getConstruction_Site()[key - 1];
 
                     contador = 1;
                     for (Team tm : this.getTeam()) {
@@ -225,7 +239,7 @@ public class Manager {
                         break;
                     }
 
-                    cs = this.getConstruction_Site()[key - 1];
+                    cs = (ConstructionSite_) this.getConstruction_Site()[key - 1];
 
                     contador = 1;
                     for (Team tm : cs.getTeams()) {
@@ -263,7 +277,7 @@ public class Manager {
                         break;
                     }
 
-                    cs = this.getConstruction_Site()[key - 1];
+                    cs = (ConstructionSite_) this.getConstruction_Site()[key - 1];
 
                     contador = 1;
                     for (Equipment eqpm : this.getEquipment()) {
@@ -302,7 +316,7 @@ public class Manager {
                         break;
                     }
 
-                    cs = this.getConstruction_Site()[key - 1];
+                    cs = (ConstructionSite_) this.getConstruction_Site()[key - 1];
 
                     contador = 1;
                     for (Equipment eqpm : cs.getEquipment()) {
@@ -349,6 +363,14 @@ public class Manager {
 
     }
 
+    /**
+     * Adds an Construction Site to the Manager.
+     *
+     *
+     * @param Name - Name of the ConstructionSite
+     * @param Location - Location of the Construction Site
+     * @throws ManagerException - if the ConstructionSite already exists.
+     */
     private void addConstruction_Site(String Name, String Location) throws ManagerException {
 
         if ((Name == null || Name.isBlank()) && (Location == null || Location.isBlank())) {
@@ -370,13 +392,18 @@ public class Manager {
         if (this.getConstruction_Site().length + 1 >= this.ConstructionSite.length) {
             ConstructionSite[] temp = new ConstructionSite[this.ConstructionSite.length * 2];
             System.arraycopy(this.ConstructionSite, 0, temp, 0, this.getConstruction_Site().length);
-            this.ConstructionSite = temp;
         }
 
         this.ConstructionSite[this.getConstruction_Site().length] = p0;
 
     }
 
+    /**
+     * Removes an Construction Site from the Manager.
+     *
+     * @param p0 - the Construction Site to be removed
+     * @throws ManagerException - if the ConstructionSite is not in the Manager.
+     */
     private void removeConstruction_Site(ConstructionSite p0) throws ManagerException {
 
         int pos = -1;
@@ -407,6 +434,12 @@ public class Manager {
 
     }
 
+    /**
+     * Returns all the Construction Sites
+     *
+     * @return ConstructionSite - all the Construction Sites contained in the
+     * Manager.
+     */
     private ConstructionSite[] getConstruction_Site() {
 
         //percorrer o array e obter as posicoes nao nulls
@@ -427,33 +460,9 @@ public class Manager {
         return temp;
     }
 
-    public int getConstruction_Site_SIZE() {
-        return this.ConstructionSite.length;
-    }
-
-    private void addTeam(ConstructionSite p0, Team p1) {
-
-        if (p0 == null || p1 == null) {
-            return;
-        }
-
-        try {
-            p0.addTeam(p1);
-        } catch (ConstructionSiteException ex) {
-            System.out.println(ex.toString());
-        }
-    }
-
     /**
-     *
-     * TEAM
-     *
-     *
-     *
-     *
-     *
-     *
-     *
+     * Sub-Menu where Teams can be managed, like adding a new Team to the
+     * software, remove it. The same goes for the adding an Employee to a Team.
      *
      */
     public void manage_Team() {
@@ -588,6 +597,12 @@ public class Manager {
 
     }
 
+    /**
+     * Adds an Team to The Manager
+     *
+     * @param Name - Name of the Team to be created.
+     * @throws ManagerException - if the Team already exists.
+     */
     private void addTeam(String Name) throws ManagerException {
 
         if ((Name == null || Name.isBlank())) {
@@ -609,13 +624,17 @@ public class Manager {
         if (this.getTeam().length + 1 >= this.Team.length) {
             Team[] temp = new Team[this.ConstructionSite.length * 2];
             System.arraycopy(this.Team, 0, temp, 0, this.getTeam().length);
-            this.Team = temp;
         }
 
         this.Team[this.getTeam().length] = p0;
 
     }
 
+    /**
+     * Returns all the Teams contained in the Manager.
+     *
+     * @return Team[] - All the Team contained in the Manager.
+     */
     private Team[] getTeam() {
         int contador = 0;
 
@@ -636,20 +655,8 @@ public class Manager {
     }
 
     /**
-     * \
-     *
-     *
-     * EMPLOYEE
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
+     * Sub-Menu where Employess can be managed, like adding a new Employee to
+     * the software, remove it and altering data.
      *
      */
     public void Manage_Employee() {
@@ -767,6 +774,12 @@ public class Manager {
 
     }
 
+    /**
+     * Adds an Employee to the Manager
+     *
+     * @param Name - Name of the Employee to be created.
+     * @param Type - EmployeeType of the Employee to be created
+     */
     private void addEmployee(String Name, EmployeeType Type) {
 
         if (Name.isEmpty() || Type == null) {
@@ -776,12 +789,16 @@ public class Manager {
         if (this.getEmployee().length + 1 >= this.Employee.length) {
             Employee[] temp = new Employee[this.Employee.length * 2];
             System.arraycopy(this.Employee, 0, temp, 0, this.getTeam().length);
-            this.Employee = temp;
         }
 
         this.Employee[this.getEmployee().length] = new Employee_(Name, Type);
     }
 
+    /**
+     * Returns all the Employees contained in the Manger
+     *
+     * @return Employee - All the Employees contained in the Manager.
+     */
     private Employee[] getEmployee() {
         int contador = 0;
 
@@ -800,6 +817,12 @@ public class Manager {
         return temp;
     }
 
+    /**
+     * Removes an Employee from the Team
+     *
+     * @param empl - The employee to be removed
+     * @throws ManagerException - if the employee doesnt exist
+     */
     private void removeEmployee(Employee empl) throws ManagerException {
         int pos = -1;
 
@@ -830,11 +853,8 @@ public class Manager {
     }
 
     /**
-     *
-     * EQUIPEMNT
-     *
-     *
-     *
+     * Sub-Menu where Equipment can be managed, like adding a new Equipment to
+     * the software, remove it and alter data.
      *
      */
     public void ManageEquipment() {
@@ -950,6 +970,13 @@ public class Manager {
 
     }
 
+    /**
+     * Adds an Equipment to the Manager.
+     *
+     * @param Name - Name of the Equipment to be created.
+     * @param Type - Equipment Type
+     * @param Status - Equipemnt Status
+     */
     private void addEquipment(String Name, EquipmentType Type, EquipmentStatus Status) {
 
         if (Name.isEmpty() || Type == null || Status == null) {
@@ -959,30 +986,39 @@ public class Manager {
         if (this.getEquipment().length + 1 >= this.Equipment.length) {
             Equipment[] temp = new Equipment[this.Equipment.length * 2];
             System.arraycopy(this.Equipment, 0, temp, 0, this.getEquipment().length);
-            this.Equipment = temp;
+
         }
 
         this.Equipment[this.getEquipment().length] = new Equipment_(Name, Type, Status);
     }
 
+    /**
+     * Returns all the Equipemnt contained in the Manager.
+     *
+     * @return Equipment - Equipment contained in the Manager.
+     */
     private Equipment[] getEquipment() {
         int contador = 0;
-
-        Equipment[] temp = new Equipment[this.Employee.length];
 
         if (this.Equipment.length != 0) {
             for (Equipment empl : this.Equipment) {
                 if (empl != null) {
-                    temp[contador++] = empl;
+                    contador++;
                 }
             }
         }
-
+        Equipment[] temp = new Equipment[contador];
         System.arraycopy(this.Equipment, 0, temp, 0, contador);
 
         return temp;
     }
 
+    /**
+     * Remove a Equipment from the Manager.
+     *
+     * @param eqm - Equipment to be removed.
+     * @throws ManagerException - if the equipment doesnt exist.
+     */
     private void removeEquipment(Equipment eqm) throws ManagerException {
         int pos = -1;
 
@@ -1012,8 +1048,8 @@ public class Manager {
     }
 
     /**
-     *
-     * EVENT MANAGER
+     * Sub-Menu where Events can be managed, like reporting a new Event to the
+     * software, remove it and Report to the Insurance using an API.
      *
      */
     public void Manage_Event() {
@@ -1024,11 +1060,11 @@ public class Manager {
 
         do {
             System.out.println("\n--Manage Event--");
-            System.out.println("1 - New Event");
-            System.out.println("2 - Reportar Event");
-            System.out.println("3 - Remover um Evento");
-            System.out.println("4 - Remover todos os Eventos");
-            System.out.println("5 - Report to Insurance");
+            System.out.println("1 - Report Event");
+            System.out.println("2 - Report to Insurance");
+            System.out.println("3 - Listar Todos Events");
+            System.out.println("4 - Remover Evento (todos/um)");
+            System.out.println("5 - Remover Todos os Eventos da API");
             System.out.println("0 - Sair");
             System.out.print("Opcao: ");
             key = scan.nextInt();
@@ -1042,53 +1078,79 @@ public class Manager {
                         System.out.println((contador++) + " - Nome:" + cs.getName() + "; Location:" + cs.getLocation());
                     }
                     System.out.println("0 - Sair");
+                    System.out.print("Opcao:");
                     key = scan.nextInt();
-
-                    ConstructionSite cs = this.getConstruction_Site()[key - 1];
 
                     if (key == 0) {
                         break;
                     }
 
-                    System.out.println("--Event Type--");
+                    ConstructionSite cs = this.getConstruction_Site()[key - 1];
+
+                    contador = 1;
+                    System.out.println("--TEAM--");
+                    for (Team tm : this.getTeam()) {
+                        System.out.println((contador++) + "- " + tm.getName());
+                    }
+                    System.out.println("0 - Sair");
+                    System.out.print("Opcao: ");
+                    key = scan.nextInt();
+
+                    if (key == 0) {
+                        break;
+                    }
+
+                    Team tm = cs.getTeams()[key - 1];
+                    System.out.println("--Reporter--");
+                    contador = 1;
+                    for (Employee empl : tm.getEmployees()) {
+                        System.out.println((contador++) + " - Name:" + empl.getName() + "; Uuid:" + empl.getUUID());
+                    }
+                    System.out.println("0 - Sair");
+                    System.out.print("Opcao: ");
+                    key = scan.nextInt();
+
+                    if (key == 0) {
+                        break;
+                    }
+
+                    Employee empl = tm.getEmployees()[key - 1];
+
+                    System.out.print("Details:");
+                    String Details = scan.next();
+                    System.out.print("Notification Message:");
+                    String NotificationMessage = scan.next();
+                    System.out.print("Title:");
+                    String Title = scan.next();
+
+                    contador = 1;
+                    System.out.println("\n--Event Priority--");
+                    for (EventPriority ep : EventPriority.values()) {
+                        System.out.println((contador++) + "- " + ep.toString());
+                    }
+                    System.out.println("0 - Sair");
+                    System.out.print("Opcao:");
+                    key = scan.nextInt();
+
+                    EventPriority evPriority = EventPriority.values()[key - 1];
+                    if (key == 0) {
+                        break;
+                    }
+
+                    System.out.println("\n--Event Type--");
                     System.out.println("1 - Failure");
                     System.out.println("2 - Incident");
-                    System.out.println("3 - Failure");
+                    System.out.println("3 - Accident");
                     System.out.println("0 - Sair");
+                    System.out.print("Opcao:");
                     int ev_type = scan.nextInt();
 
+                    if (ev_type == 0) {
+                        break;
+                    }
                     switch (ev_type) {
                         //FAILURE
                         case 1:
-
-                            contador = 1;
-                            System.out.println("--TEAM--");
-                            for (Team tm : this.getTeam()) {
-                                System.out.println((contador++) + "- " + tm.getName());
-                            }
-                            System.out.println("0 - Sair");
-                            System.out.print("Opcao: ");
-                            key = scan.nextInt();
-
-                            if (key == 0) {
-                                break;
-                            }
-
-                            contador = 1;
-                            Team tm = cs.getTeams()[key - 1];
-                            System.out.println("--Employee--");
-                            for (Employee empl : tm.getEmployees()) {
-                                System.out.println((contador++) + " - Name:" + empl.getName() + "; Uuid:" + empl.getUUID());
-                            }
-                            System.out.println("0 - Sair");
-                            System.out.print("Opcao: ");
-                            key = scan.nextInt();
-
-                            if (key == 0) {
-                                break;
-                            }
-
-                            Employee empl = tm.getEmployees()[key - 1];
 
                             contador = 1;
                             System.out.println("--Equipment--");
@@ -1096,6 +1158,7 @@ public class Manager {
                                 System.out.println((contador++) + " - Name:" + eqpmnt.getName() + "; Type:" + eqpmnt.getType());
                             }
                             System.out.println("0 - Sair");
+                            System.out.print("Opcao:");
                             key = scan.nextInt();
 
                             if (key == 0) {
@@ -1103,32 +1166,165 @@ public class Manager {
                             }
                             Equipment eqpmnt = cs.getEquipment()[key - 1];
 
-                            System.out.print("Details:");
-                            String Details = scan.next();
-                            System.out.print("Details:");
-                            String NotificationMessage = scan.next();
-                            System.out.print("Title:");
-                            String Title = scan.next();
+                             {
+                                try {
 
+                                    this.EventManager.reportEvent(new Failure_(eqpmnt, cs, Details, NotificationMessage, EventPriority.values()[key - 1], Title, empl));
+                                } catch (EventManagerException ex) {
+                                    System.out.println(ex.getMessage());
+                                }
+                            }
+                            break;
+                        //INCIDENT
+                        case 2: {
+                            try {
+                                this.EventManager.reportEvent(new Incident_(cs, Details, NotificationMessage, EventPriority.values()[key - 1], Title, empl));
+                            } catch (EventManagerException ex) {
+                                System.out.println(ex.getMessage());
+                            }
+                        }
+                        break;
+
+                        case 3:
+
+                            System.out.println("--Injuried Employee--");
                             contador = 1;
-
-                            for (EventPriority ep : EventPriority.values()) {
-                                System.out.println((contador++) + "- " + ep.toString());
+                            for (Employee empl_in : tm.getEmployees()) {
+                                System.out.println((contador++) + " - Name:" + empl_in.getName() + "; Uuid:" + empl_in.getUUID());
                             }
                             System.out.println("0 - Sair");
+                            System.out.print("Opcao: ");
                             key = scan.nextInt();
 
                             if (key == 0) {
                                 break;
                             }
-                           // EventPriority.values()[key - 1];
-                            this.EventManager.addEvent(new Failure_(eqpmnt, cs, Details, NotificationMessage,EventPriority.HIGH, Title, empl));
+
+                             {
+                                try {
+                                    this.EventManager.reportEvent(new Accident_(tm.getEmployees()[key - 1], cs, Details, NotificationMessage, evPriority, Title, empl));
+                                } catch (EventManagerException ex) {
+                                    System.out.println(ex.getMessage());
+                                }
+                            }
+
+                            break;
+
+                        default:
+                            break;
+
+                    }
+
+                    break;
+
+                //Report Insurance
+                case 2:
+
+                    contador = 1;
+                    System.out.println("\n--Report To Insurance--");
+
+                    for (Event evnt : this.EventManager.getEvent()) {
+
+                        if (evnt instanceof Failure_) {
+                            if (((Failure_) evnt).isInsurance_Notified() == false) {
+                                System.out.println((contador++) + "- Title:" + evnt.getTitle() + "; Uuid:" + evnt.getUuid());
+                            }
+                        } else if (evnt instanceof Accident_) {
+                            if (((Accident_) evnt).isInsurance_Notified() == false) {
+                                System.out.println((contador++) + "- Title:" + evnt.getTitle() + "; Uuid:" + evnt.getUuid());
+                            }
+                        } else if (evnt instanceof Incident_) {
+                            if (((Incident_) evnt).isInsurance_Notified() == false) {
+                                System.out.println((contador++) + "- Title:" + evnt.getTitle() + "; Uuid:" + evnt.getUuid());
+                            }
+                        }
+                    }
+                    System.out.println("0 - Sair");
+                    System.out.print("Opcao:");
+                    key = scan.nextInt();
+
+                    if (key == 0) {
+                        break;
+                    }
+
+                     {
+                        try {
+                            this.EventManager.Report_toInsurance(this.EventManager.getEvent()[key - 1]);
+                        } catch (EventManagerException ex) {
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+
+                    break;
+                //Listar Eventos
+                case 3:
+                    for (Event envt : this.EventManager.getEvent()) {
+                        /* if (envt instanceof Failure_) {
+                            System.out.println(((Failure_) envt).toString());
+                        } else if (envt instanceof Incident_) {
+                            System.out.println(((Incident_) envt).toString());
+                        } else if (envt instanceof Accident_) {
+                            System.out.println(((Accident_) envt).toString());
+                        }*/
+                        System.out.println(envt.toString());
+                    }
+
+                    break;
+                //Remover Eventos
+                case 4:
+                    System.out.println("\n--Remove Event--");
+                    System.out.println("1 - Todos");
+                    System.out.println("2 - Apenas um");
+                    System.out.println("0 - Sair");
+                    System.out.print("Opcao:");
+
+                    key = scan.nextInt();
+
+                    if (key == 0) {
+                        break;
+                    }
+
+                    switch (key) {
+                        case 1:
+                            this.EventManager.removeAllEvents();
+                            System.out.println("Removido todos os eventos");
+                            break;
+                        case 2:
+                            contador = 1;
+                            for (Event evnt : this.EventManager.getEvent()) {
+                                System.out.println((contador++) + "title:" + evnt.getTitle() + "; Uuid:" + evnt.getUuid() + "; Data:" + evnt.getDate().toString());
+                            }
+                            System.out.println("0 - Sair");
+                            System.out.print("Opcao:");
+
+                            key = scan.nextInt();
+                            if (key == 0) {
+                                break;
+                            }
+
+                             {
+                                try {
+                                    this.EventManager.removeEvent(this.EventManager.getEvent()[key - 1]);
+                                    System.out.println("Retirado com sucesso");
+                                } catch (EventManagerException ex) {
+                                    System.out.println(ex.getMessage());
+                                }
+                            }
 
                             break;
 
                     }
 
                     break;
+                case 5: {
+                    try {
+                        InsuranceReporter.resetEvents("GywNgSAn4bCxayZ", "Grupo3");
+                    } catch (IOException | InterruptedException ex) {
+                        System.out.println("Error - Removing the Events in the API");
+                    }
+                }
+                break;
+
             }
 
         } while (key != 0);

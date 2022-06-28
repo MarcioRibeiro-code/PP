@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* 
+* Nome: Marcio Samuel Santos Ribeiro
+* Número: 8200408
+* Turma: LEI2T4
+* 
+* Nome: Hugo Miguel Gomes Alves Ribeiro
+* Número: 8200441
+* Turma: LEI2T3
+*/
 package Exame_FINAL.Classes;
 
 import estgconstroi.Equipment;
@@ -19,6 +23,12 @@ public class Equipment_ implements Equipment {
     private final EquipmentType Type;
     private EquipmentStatus Status;
 
+    /**
+     *
+     * @param string
+     * @param es
+     * @param et
+     */
     public Equipment_(String Name, EquipmentType Type, EquipmentStatus Status) {
         this.Name = Name;
         this.Type = Type;
@@ -94,7 +104,7 @@ public class Equipment_ implements Equipment {
 
     @Override
     public String toString() {
-        return "--Equipment--" + "\nName:" + Name + "\nType:" + Type + "\nStatus:" + Status;
+        return "\n--Equipment--" + "\nName:" + Name + "\nType:" + Type + "\nStatus:" + Status;
     }
 
 }

@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* 
+* Nome: Marcio Samuel Santos Ribeiro
+* Número: 8200408
+* Turma: LEI2T4
+* 
+* Nome: Hugo Miguel Gomes Alves Ribeiro
+* Número: 8200441
+* Turma: LEI2T3
+*/
 package Exame_FINAL.Classes;
 
 import estgconstroi.ConstructionSite;
@@ -15,7 +19,6 @@ import estgconstroi.enums.EquipmentType;
 import java.time.LocalDate;
 import estgconstroi.exceptions.ConstructionSiteException;
 //UTILIZADO NO TOSTRING
-import java.util.Arrays;
 
 /**
  *
@@ -32,6 +35,11 @@ public class ConstructionSite_ implements ConstructionSite {
     private Equipment[] Equipment;
     // private EquipmentType equipment;
 
+    /**
+     *
+     * @param string
+     * @param string1
+     */
     public ConstructionSite_(String Name, String Location) {
         this.Name = Name;
         this.Location = Location;
@@ -60,11 +68,22 @@ public class ConstructionSite_ implements ConstructionSite {
         return this.Location;
     }
 
+    /**
+     * Returns the permit of the construction site.
+     *
+     * @return String returns the permit of the Construction site.
+     */
     @Override
     public String getPermit() {
         return this.Permit;
     }
 
+    /**
+     * Returns the permit expiration date of the construction permit.
+     *
+     * @return String returns the permit expiration date of the construction
+     * permit.
+     */
     @Override
     public LocalDate getPermitExpirationDate() {
         return this.PermitExpirationDate;
@@ -83,19 +102,37 @@ public class ConstructionSite_ implements ConstructionSite {
         this.PermitExpirationDate = ld;
     }
 
+    /**
+     * Returns the responsible for the construction site.
+     *
+     * @return Employee returns the responsible for the construction site.
+     */
     @Override
     public Employee getResponsible() {
         return this.Responsible;
     }
 
+    /**
+     * Sets the responsible for the construction site.
+     *
+     * @param empl - employee
+     * @throws ConstructionSiteException - if the employee is not a Manager.
+     */
     @Override
     public void setResponsible(Employee empl) throws ConstructionSiteException {
         if (empl.getType() != EmployeeType.MANAGER) {
             throw new ConstructionSiteException("The employee is not a Manager");
         }
-
+        this.Responsible = empl;
     }
 
+    /**
+     * Adds a team to the construction site.
+     *
+     * @param team - The Team to be added
+     * @throws ConstructionSiteException - if the team is already in the
+     * construction Site.
+     */
     @Override
     public void addTeam(Team team) throws ConstructionSiteException {
 
@@ -116,12 +153,19 @@ public class ConstructionSite_ implements ConstructionSite {
         if (this.getTeams().length + 1 >= this.Team.length) {
             Team[] temp = new Team[this.Team.length * 2];
             System.arraycopy(this.Team, 0, temp, 0, this.getTeams().length);
-            this.Team = temp;
+
         }
 
         this.Team[this.getTeams().length] = team;
     }
 
+    /**
+     * Removes a team from the construction site.
+     *
+     * @param team - The Team to be removed.
+     * @throws ConstructionSiteException - if the team is not in the
+     * construction site.
+     */
     @Override
     public void removeTeam(Team team) throws ConstructionSiteException {
         int pos = -1;
@@ -151,6 +195,12 @@ public class ConstructionSite_ implements ConstructionSite {
         }
     }
 
+    /**
+     * Returns the teams of the construction site with the given name.
+     *
+     * @param string - Team's name
+     * @return the teams of the construction site with the given name.
+     */
     @Override
     public Team[] getTeams(String string) {
 
@@ -166,6 +216,11 @@ public class ConstructionSite_ implements ConstructionSite {
         return temp;
     }
 
+    /**
+     * Returns the teams of the construction site.
+     *
+     * @return the teams of the construction site.
+     */
     @Override
     public Team[] getTeams() {
         //percorrer o array e obter as posicoes nao nulls
@@ -184,19 +239,37 @@ public class ConstructionSite_ implements ConstructionSite {
         return temp;
     }
 
+    /**
+     * Returns if all Team have atleast one EmployeeType.TEAM_LEADER.
+     *
+     * @return boolean - Returns if all Team have atleast one
+     * EmployeeType.TEAM_LEADER.
+     */
     private boolean allTeams_haveLeaders() {
+        boolean found[] = {false, false, false, false, false};
 
+        int contador = 0;
         for (Team tm1 : this.getTeams()) {
-            for (Employee empl1 : tm1.getEmployees()) {
-                if (empl1.getType() != EmployeeType.MANAGER) {
-                    return false;
-                }
+            if (tm1.getEmployees(EmployeeType.TEAM_LEADER).length > 0) {
+                found[contador++] = true;
             }
         }
-
+        for (boolean tmp : found) {
+            if (tmp == false) {
+                return false;
+            }
+        }
         return true;
     }
 
+    /**
+     *
+     * Add a new equipment to the construction site.
+     *
+     * @param eqpmnt - The equipment to be added.
+     * @throws ConstructionSiteException - if the equipment is already in the
+     * Construction Site.
+     */
     @Override
     public void addEquipment(Equipment eqpmnt) throws ConstructionSiteException {
 
@@ -217,13 +290,19 @@ public class ConstructionSite_ implements ConstructionSite {
         if (this.getEquipment().length + 1 >= this.Equipment.length) {
             Equipment[] temp = new Equipment[this.Equipment.length * 2];
             System.arraycopy(this.Equipment, 0, temp, 0, this.getEquipment().length);
-            this.Equipment = temp;
         }
 
         this.Equipment[this.getEquipment().length] = eqpmnt;
 
     }
 
+    /**
+     * Remove a equipment from the construction site.
+     *
+     * @param eqpmnt - The equipment to be removed
+     * @throws ConstructionSiteException - if the equipment is not in the
+     * construction site.
+     */
     @Override
     public void removeEquipment(Equipment eqpmnt) throws ConstructionSiteException {
         int pos = -1;
@@ -384,6 +463,11 @@ public class ConstructionSite_ implements ConstructionSite {
         return true;
     }
 
+    /**
+     * Return all the Contained in the Construction Site.
+     *
+     * @return String - Return all the Contained in the Construction Site.
+     */
     @Override
     public String toString() {
 
@@ -392,9 +476,28 @@ public class ConstructionSite_ implements ConstructionSite {
             Team_s += tm1.toString();
         }
 
-        return "ConstructionSite_{" + "Name=" + Name + ", Location=" + Location + ", Permit=" + Permit + ", PermitExpirationDate=" + PermitExpirationDate + ", Responsible=" + Responsible + ", Team=" + Team_s + ", TEAM SIZE=" + this.Team.length + ", Equipment=" + Arrays.toString(this.getEquipment()) + '}';
+        String Equipment_s = "";
+        for (Equipment eqpmnt : this.getEquipment()) {
+            Equipment_s += eqpmnt.toString();
+        }
+
+        String Responsible_String = "";
+        if (this.Responsible != null) {
+            Responsible_String += this.Responsible.toString();
+        }
+
+        return "\n--ConstructionSite--" + "\nName=" + Name + "\nLocation=" + Location
+                + "\nPermit=" + Permit + "\nPermitExpirationDate=" + PermitExpirationDate
+                + "\nResponsible=" + Responsible_String + "\nTeam=" + Team_s
+                + "\nTEAM SIZE=" + this.Team.length + ", Equipment=" + Equipment_s;
     }
 
+    /**
+     * Returns if the objects are equals or not.
+     *
+     * @param obj - An Construction Site
+     * @return boolean - if the objects are equals or not.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
